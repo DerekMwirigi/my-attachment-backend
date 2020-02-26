@@ -1,0 +1,4 @@
+$ cat .git/info/exclude
+db.sqlite3
+env/
+.vscode/
