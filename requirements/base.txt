@@ -5,3 +5,4 @@ pytz
 python-decouple
 django-environ
 Pillow
+django-cors-headers

@@ -76,8 +76,13 @@ class StudentLogBook_API(APIView):
     def post(self, request, format=None):
         valid = True
         errors = []
-        response = { 'status': False, 'status_code': 0, 'status_message': 'Failed', 'errors': errors, 'message': 'Sorry, there were some errors', 'data': request.data }
+        try:
+            response = { 'status': True, 'status_code': 1, 'status_message': 'Success', 'message': 'Done', 'data': request.data['id'] }
+        except Exception as inst:
+            errors =str(inst)
+            response = { 'status': False, 'status_code': 0, 'status_message': 'Failed', 'errors': errors, 'message': 'Sorry, there were some errors', 'data': None }
         return HttpResponse(json.dumps(response), content_type='application/json') 
+        
 
 class LecturerStudentAssingment_APS(APIView):
     parser_classes = [JSONParser]
