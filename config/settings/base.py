@@ -16,6 +16,7 @@ import environ
 from decouple import config
 from django.utils.timezone import timedelta
 
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = environ.Path(__file__) - 3
@@ -34,34 +35,8 @@ SECRET_KEY = '_b(533r@3i*=9(@5@s3v@o)d)v4@ki#-mm4#j@pktcx#)3&l@#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['206.81.26.7', 'localhost']
+ALLOWED_HOSTS = ['*']
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:3001",
-]
-
-CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
 
 # Application definition
 
@@ -77,18 +52,17 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     'crispy_forms',
     'rest_framework',
-    'corsheaders'
 )
 
 LOCAL_APPS = (
-    'project_apps.authenticate.apps.AuthenticateConfig',
     'project_apps.api.apps.ApiConfig',
-    'project_apps.errors.apps.ErrorsConfig'
 )
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 ROOT_URLCONF = 'config.urls'
+
+AUTH_USER_MODEL = 'api.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
@@ -139,17 +113,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'HOST': 'localhost',
-#         'NAME': 'swyft_courier',
-#         'PORT': '3306',
-#         'USER': 'root',
-#         'PASSWORD': 'P@ssw0rd'
-#     }
-# }
-
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -182,8 +145,17 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = 'admin'
 LOGIN_URL = 'sign-in'
+
+REST_USE_JWT = True
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+
+    'AUTH_HEADER_TYPES': ('Bearer', 'Token'),
+}
 
 
 # Static files (CSS, JavaScript, Images)
