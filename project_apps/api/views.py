@@ -28,9 +28,21 @@ class SignUp_API(APIView):
         return HttpResponse(json.dumps(response), content_type='application/json') 
 
     def post(self, request, format=None):
-        errors = []
-        response = { 'status': False, 'status_code': 0, 'status_message': 'Failed', 'errors': errors, 'message': 'Sorry, there were some errors', 'data': request.data }
-        
+        response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'Account Not created', 'data': None }
+        try:
+            user = User(
+                username=request.data['email'],
+                first_name=request.data['first_name'],
+                last_name=request.data['last_name'],
+                phone=request.data['phone'],
+                email=request.data['email'],
+                user_role=int(request.data['user_role'])
+            )
+            user.set_password(request.data['password'])
+            user.save()
+            response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Account created', 'data': {} }
+        except Exception as ex:
+            response['errors'] = [str(ex)]
         return HttpResponse(json.dumps(response), content_type='application/json') 
 
 class SignIn_API(APIView):
