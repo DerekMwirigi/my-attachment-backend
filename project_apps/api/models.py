@@ -3,6 +3,53 @@ from django.urls import reverse
 import uuid
 from django.utils import timezone
 
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+import uuid
+from django.utils import timezone
+
+SuperAdmin = 0
+Lecturer = 1
+Student = 2
+
+USER_ROLE_CHOICES = (
+    (SuperAdmin, 'SuperAdmin'),
+    (Lecturer, 'Lecturer'),
+    (Student, 'Student')
+)
+
+ACTIVE = 1
+INACTIVE = 0
+
+USER_STATUS_CHOICES = (
+    (ACTIVE,'Active'),
+    (INACTIVE, 'In Active'),
+)
+class User(AbstractUser):
+    """
+    A base user for auth and extending
+    """
+    code = models.UUIDField(default=uuid.uuid4)
+    phone = models.CharField(max_length=12, default='')
+    user_role = models.PositiveSmallIntegerField(choices=USER_ROLE_CHOICES, default=Student)
+    status = models.PositiveSmallIntegerField(default=ACTIVE, choices=USER_STATUS_CHOICES)
+
+
+    def __str__(self):
+        return self.username
+
+    @property
+    def full_names(self):
+        return "{} {}".format(self.first_name.capitalize(),self.last_name.capitalize())
+
+    @property
+    def get_phone(self):
+        return self.phone
+    
+    @property
+    def get_email(self):
+        return self.email
+
 class Course(models.Model):
     STATUS_CHOICES = (
         ('0','In active'),
@@ -23,61 +70,13 @@ class Course(models.Model):
     def get_absolute_url(self):
 	    return reverse('course-details', kwargs={'pk': self.pk})
 
-
-class Lecturer (models.Model):
-    STATUS_CHOICES = (
-       ('0','In active'),
-       ('1', 'Active')
-    )
-    names = models.CharField(max_length=50, unique=True)
-    code = models.UUIDField(default=uuid.uuid4)
-    phone = models.CharField(max_length=50, default='')
-    email = models.CharField(max_length=50, default='')
-    courses = models.ManyToManyField(Course)
-    created_on = models.DateTimeField(default=timezone.now)
-    status = models.CharField(default=0, max_length=200, choices=STATUS_CHOICES)
-
-    class Meta:
-        db_table = "lecturers"
-        verbose_name_plural = "lecturers"
-    
-    def __str__(self):
-        return self.names
-
-    def get_absolute_url(self):
-        return reverse('lecturer-details', kwargs={'pk': self.pk})
-
-class Student (models.Model):
-    STATUS_CHOICES = (
-       ('0','In active'),
-       ('1', 'Active')
-    )
-    names = models.CharField(max_length=50, unique=True)
-    code = models.UUIDField(default=uuid.uuid4)
-    phone = models.CharField(max_length=50, default='')
-    email = models.CharField(max_length=50, default='')
-    regno = models.CharField(max_length=50, default='')
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    created_on = models.DateTimeField(default=timezone.now)
-    status = models.CharField(default=0, max_length=200, choices=STATUS_CHOICES)
-
-    class Meta:
-        db_table = "students"
-        verbose_name_plural = "students"
-    
-    def __str__(self):
-        return self.names
-
-    def get_absolute_url(self):
-        return reverse('student-details', kwargs={'pk': self.pk})
-
 class LecturerStudentAssignment(models.Model):
     STATUS_CHOICES = (
         ('0','In active'),
         ('1', 'Active')
     )
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    lecturer = models.ForeignKey(Lecturer, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_assign')
+    lecturer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lecturer_assign')
     code = models.UUIDField(default=uuid.uuid4)
     created_on = models.DateTimeField(default=timezone.now)
     status = models.CharField(default=0, max_length=200, choices=STATUS_CHOICES)
@@ -99,7 +98,7 @@ class StudentLogBook(models.Model):
         ('1', 'Approved')
     )
     label = models.CharField(max_length=500, unique=True, default='Default Logbook')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_logbook')
     code = models.UUIDField(default=uuid.uuid4)
     created_on = models.DateTimeField(default=timezone.now)
     status = models.CharField(default=0, max_length=200, choices=STATUS_CHOICES)
@@ -119,7 +118,6 @@ class StudentLogBookItem(models.Model):
         ('0','Not Approved'),
         ('1', 'Approved')
     )
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     code = models.UUIDField(default=uuid.uuid4)
     date = models.DateField()
     worked_on = models.CharField(max_length=500, unique=True)
@@ -140,7 +138,7 @@ class StudentLogBookItem(models.Model):
 
 class StudentAttachmentLocation(models.Model):
     code = models.UUIDField(default=uuid.uuid4)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_att_loc')
     street = models.CharField(max_length=50, default='')
     lat = models.CharField(max_length=100,default='')
     lng = models.CharField(max_length=100, default='')
