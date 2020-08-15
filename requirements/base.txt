@@ -1,6 +1,6 @@
 celery==4.3
 django==2.2
-djangorestframework==3.9
+djangorestframework==3.9.1
 pytz
 drf-yasg==1.16
 django-redis-cache==2.0.0
