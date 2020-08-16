@@ -1,8 +1,13 @@
 from rest_framework import serializers
+from .models import StudentLogBook, StudentLogBookItem
 
-# class AccountSetupSerializer(serializers.ModelSerializer):
+class StudentLogBookItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentLogBookItem
+        fields = ('id','date', 'worked_on', 'created_on', 'status')
 
-    # class Meta:
-        # model = ABC
-        #fields = ('company_details', 'company_admin_details', 'hq_branch_details', 'hq_branch_admin_details')
+class StudentLogBookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentLogBook
+        fields = ('id','label', 'created_on')
 

@@ -86,7 +86,7 @@ class LecturerStudentAssignment(models.Model):
         verbose_name_plural = "lecturer_student_assignments"
 
     def __str__(self):
-        return 'Student: ' + self.student.names + ', Lecturer: ' + self.lecturer.names
+        return 'Student: ' + self.student.first_name + ', Lecturer: ' + self.lecturer.first_name
 
     def get_absolute_url(self):
 	    return reverse('assignment-details', kwargs={'pk': self.pk})
@@ -108,7 +108,7 @@ class StudentLogBook(models.Model):
         verbose_name_plural = "student_logbooks"
 
     def __str__(self):
-        return self.student.names + ', ' + self.label
+        return self.student.first_name
 
     def get_absolute_url(self):
 	    return reverse('logbook-details', kwargs={'pk': self.pk})
@@ -130,7 +130,7 @@ class StudentLogBookItem(models.Model):
         verbose_name_plural = "student_logbook_items"
 
     def __str__(self):
-        return self.student.names + ', ' + self.worked_on + ', ' + str(self.date)
+        return self.logbook.student.first_name + ', ' + self.worked_on + ', ' + str(self.date)
 
     def get_absolute_url(self):
 	    return reverse('logbook-item-details', kwargs={'pk': self.pk})
@@ -149,7 +149,7 @@ class StudentAttachmentLocation(models.Model):
         verbose_name_plural = "student_attachment_locations"
     
     def __str__(self):
-        return self.student.names
+        return self.student.first_name
 
     def get_absolute_url(self):
         return reverse('student-attachment-location-details', kwargs={'pk': self.pk})
