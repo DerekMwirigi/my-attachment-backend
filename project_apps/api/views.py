@@ -19,7 +19,7 @@ from .models import (
     StudentAttachmentLocation
 )
 
-from .serializers import StudentLogBookSerializer, StudentLogBookItemSerializer
+from .serializers import UserSerializer, StudentLogBookSerializer, StudentLogBookItemSerializer
 
 class SignUp_API(APIView):
     parser_classes = [JSONParser]
@@ -38,6 +38,21 @@ class SignUp_API(APIView):
             obj.set_password(request.data['password'])
             obj.save()
             response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Account created', 'data': {} }
+        except Exception as ex:
+            response['errors'] = [str(ex)]
+        return HttpResponse(json.dumps(response), content_type='application/json') 
+
+class Account_API(APIView):
+    parser_classes = [JSONParser]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'Account', 'data': None }
+        try:
+            data = UserSerializer(request.user, many=False).data
+            # if request.user.user_role == 2:
+            #     data['logbook']
+            response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Account', 'data': data }
         except Exception as ex:
             response['errors'] = [str(ex)]
         return HttpResponse(json.dumps(response), content_type='application/json') 

@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from .models import StudentLogBook, StudentLogBookItem
+from .models import User, StudentLogBook, StudentLogBookItem
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id','first_name', 'last_name', 'phone', 'email', 'user_role')
 
 class StudentLogBookItemSerializer(serializers.ModelSerializer):
     class Meta:
