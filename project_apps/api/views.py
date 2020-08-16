@@ -74,28 +74,39 @@ class StudentLogBook_API(APIView):
             response = { 'status': False, 'status_code': 0, 'status_message': 'Failed', 'errors': errors, 'message': 'Sorry, there were some errors', 'data': '' }
         return HttpResponse(json.dumps(response), content_type='application/json') 
 
-    def post(self, request, format=None):
-        valid = True
-        errors = []
-        try:
-            response = { 'status': True, 'status_code': 1, 'status_message': 'Success', 'message': 'Done', 'data': request.data['id'] }
-        except Exception as inst:
-            errors =str(inst)
-            response = { 'status': False, 'status_code': 0, 'status_message': 'Failed', 'errors': errors, 'message': 'Sorry, there were some errors', 'data': None }
-        return HttpResponse(json.dumps(response), content_type='application/json') 
-        
-
-class LecturerStudentAssingment_APS(APIView):
+class StudentLogBookItem_API(APIView):
     parser_classes = [JSONParser]
     permission_classes = [AllowAny]
-
-    def get(self, request, format=None):
-        valid = True
-        errors = []
+   
+    def post(self, request, format=None):
+        response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'Not save', 'data': None }
         try:
-            
-            response = { 'status': True, 'status_code': 1, 'status_message': 'Success', 'errors': errors, 'message': 'Here is the data', 'data': data }
-        except Exception as inst:
-            errors =str(inst)
-            response = { 'status': False, 'status_code': 0, 'status_message': 'Failed', 'errors': errors, 'message': 'Sorry, there were some errors', 'data': '' }
+            studentlog_book_item = StudentLogBookItem(
+                date = request.data['date'],
+                worked_on = request.data['worked_on'],
+                logbook = StudentLogBook.objects.get(student=request.user)
+            )
+            studentlog_book_item.save()
+            response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Saved', 'data': {} }
+        except Exception as ex:
+            response['errors'] = [str(ex)]
         return HttpResponse(json.dumps(response), content_type='application/json') 
+
+class StudentAttachmentLocation_API(APIView):
+    parser_classes = [JSONParser]
+    permission_classes = [AllowAny]
+   
+    def post(self, request, format=None):
+        response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'Not save', 'data': None }
+        try:
+            studentlog_book_item = StudentLogBookItem(
+                date = request.data['date'],
+                worked_on = request.data['worked_on'],
+                logbook = StudentLogBook.objects.get(student=request.user)
+            )
+            studentlog_book_item.save()
+            response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Saved', 'data': {} }
+        except Exception as ex:
+            response['errors'] = [str(ex)]
+        return HttpResponse(json.dumps(response), content_type='application/json') 
+        
