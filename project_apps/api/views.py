@@ -53,7 +53,7 @@ class SignUp_API(APIView):
             payload = {'username':request.data['email'], 'password': request.data['password']}
             http_response = requests.post(url='http://138.197.196.78/api/sign-in/', json=payload)
             if http_response.status_code == 200:
-                response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Account created', 'data': json.loads(http_response.content) }
+                response = json.loads(http_response.content)
             else:
                 response['errors'].append('Created but NOT signed In')
                 obj.delete()
