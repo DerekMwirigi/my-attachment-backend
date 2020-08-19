@@ -119,7 +119,7 @@ class StudentLogBookItem_API(APIView):
                 logbook = StudentLogBook.objects.get(student=request.user)
             )
             obj.save()
-	        logbook = StudentLogBook.objects.get(student=request.user)
+            logbook = StudentLogBook.objects.get(student=request.user)
             data = StudentLogBookSerializer(logbook, many=False).data
             logbook_items = StudentLogBookItem.objects.filter(logbook=logbook)
             data['items'] = StudentLogBookItemSerializer(logbook_items, many=True).data
