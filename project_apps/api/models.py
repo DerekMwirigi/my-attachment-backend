@@ -97,7 +97,7 @@ class StudentLogBook(models.Model):
         ('0','Not Approved'),
         ('1', 'Approved')
     )
-    label = models.CharField(max_length=500, unique=True, default='Default Logbook')
+    label = models.CharField(max_length=500, default='Default Logbook')
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_logbook')
     code = models.UUIDField(default=uuid.uuid4)
     created_on = models.DateTimeField(default=timezone.now)

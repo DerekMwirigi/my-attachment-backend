@@ -3,11 +3,17 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core import serializers
 from . import tasks
+
 import json
+import requests
+
 from django.http import HttpResponse
 from rest_framework.permissions import (
     AllowAny, IsAuthenticated
 )
+
+from rest_framework_simplejwt import views as jwt_views
+
 from rest_framework.decorators import api_view, permission_classes
 
 from .models import (
@@ -37,9 +43,23 @@ class SignUp_API(APIView):
             )
             obj.set_password(request.data['password'])
             obj.save()
-            response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Account created', 'data': {} }
+            # create default logbook
+            if int(request.data['user_role']) == 2:
+                logbook = StudentLogBook(
+                    student=obj
+                )
+                logbook.save()
+            # create access (token)
+            payload = {'username':request.data['email'], 'password': request.data['password']}
+            http_response = requests.post(url='http://138.197.196.78/api/sign-in/', json=payload)
+            if http_response.status_code == 200:
+                response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Account created', 'data': json.loads(http_response.content) }
+            else:
+                response['errors'].append('Created but NOT signed In')
+                obj.delete()
+                logbook.delete()
         except Exception as ex:
-            response['errors'] = [str(ex)]
+            response['errors'].append(str(ex))
         return HttpResponse(json.dumps(response), content_type='application/json') 
 
 class Account_API(APIView):
