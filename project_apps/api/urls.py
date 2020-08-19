@@ -7,6 +7,7 @@ from .views import (
     Account_API,
     StudentLogBook_API,
     StudentLogBookItem_API,
+    LecturerStudentAssignment_API
 )
 urlpatterns = [
     path('sign-in/', jwt_views.TokenObtainPairView.as_view(), name='sign-in'),
@@ -14,4 +15,5 @@ urlpatterns = [
     path('sign-up/', SignUp_API.as_view(), name='sign-up'),
     path('student-logbook/', StudentLogBook_API.as_view(), name='student-logbook'),
     path('student-logbook-item/', StudentLogBookItem_API.as_view(), name='student-logbook'),
+    path('lecturer-student-assignments/', LecturerStudentAssignment_API.as_view(), name='lecturer-student-assignments'),
 ]
