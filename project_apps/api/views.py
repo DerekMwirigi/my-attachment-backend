@@ -4,6 +4,8 @@ from rest_framework.views import APIView
 from django.core import serializers
 from . import tasks
 
+from config.utils import date_filter_split
+
 import json
 import requests
 
@@ -113,8 +115,9 @@ class StudentLogBookItem_API(APIView):
     def post(self, request, format=None):
         response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'Not save', 'data': None }
         try:
+            start_date, end_date = date_filter_split(None)
             obj = StudentLogBookItem(
-                date = '',
+                date = start_date,
                 worked_on = request.data['worked_on'],
                 logbook = StudentLogBook.objects.get(student=request.user)
             )
