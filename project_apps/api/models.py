@@ -119,7 +119,7 @@ class StudentLogBookItem(models.Model):
         ('1', 'Approved')
     )
     code = models.UUIDField(default=uuid.uuid4)
-    date = models.CharField(max_length=500, unique=False)
+    date = models.DateField(blank=True)
     worked_on = models.CharField(max_length=500, unique=True)
     logbook = models.ForeignKey(StudentLogBook, on_delete=models.CASCADE, default=0)
     created_on = models.DateTimeField(default=timezone.now)
