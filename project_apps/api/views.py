@@ -27,7 +27,7 @@ from .models import (
     StudentAttachmentLocation
 )
 
-from .serializers import UserSerializer, StudentLogBookSerializer, StudentLogBookItemSerializer
+from .serializers import UserSerializer, StudentLogBookSerializer, StudentLogBookItemSerializer, StudentAttachmentLocationSerializer
 
 class SignUp_API(APIView):
     parser_classes = [JSONParser]
@@ -72,6 +72,8 @@ class Account_API(APIView):
         response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'Account', 'data': None }
         try:
             data = UserSerializer(request.user, many=False).data
+            if request.user.user_role == 2:
+                data['address'] = StudentAttachmentLocationSerializer(StudentAttachmentLocation.objects.get(student=request.user), many=False).data
             response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Account', 'data': data }
         except Exception as ex:
             response['errors'] = [str(ex)]
@@ -153,7 +155,9 @@ class LecturerStudentAssignment_API(APIView):
             students = []
             lec_stds = LecturerStudentAssignment.objects.get(lecturer=request.user)
             for lec_std in lec_stds:
-                students.append(UserSerializer(lec_std.student, many=False).data)
+                student = UserSerializer(lec_std.student, many=False).data
+                student['address'] = StudentAttachmentLocationSerializer(StudentAttachmentLocation.objects.get(student=lec_std.student), many=False).data
+                students.append(student)
             response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Items', 'data': students }
         except Exception as ex:
             response['errors'] = [str(ex)]

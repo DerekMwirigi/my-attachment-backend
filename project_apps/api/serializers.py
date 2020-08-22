@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, StudentLogBook, StudentLogBookItem
+from .models import User, StudentLogBook, StudentLogBookItem, StudentAttachmentLocation
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,3 +16,7 @@ class StudentLogBookSerializer(serializers.ModelSerializer):
         model = StudentLogBook
         fields = ('id','label', 'created_on')
 
+class StudentAttachmentLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StudentAttachmentLocation
+        fields = ('id', 'street', 'lat', 'lng', 'info')
