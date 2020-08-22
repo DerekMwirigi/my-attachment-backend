@@ -156,7 +156,12 @@ class LecturerStudentAssignment_API(APIView):
             lec_stds = LecturerStudentAssignment.objects.filter(lecturer=request.user)
             for lec_std in lec_stds:
                 student = UserSerializer(lec_std.student, many=False).data
-                student['address'] = StudentAttachmentLocationSerializer(StudentAttachmentLocation.objects.get(student=lec_std.student), many=False).data
+                address = None
+                try:
+                    address = StudentAttachmentLocationSerializer(StudentAttachmentLocation.objects.get(student=lec_std.student), many=False).data
+                except Exception as ex:
+                    pass
+                student['address'] = address
                 students.append(student)
             response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Items', 'data': students }
         except Exception as ex:
