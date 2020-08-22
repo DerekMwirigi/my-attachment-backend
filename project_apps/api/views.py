@@ -73,7 +73,12 @@ class Account_API(APIView):
         try:
             data = UserSerializer(request.user, many=False).data
             if request.user.user_role == 2:
-                data['address'] = StudentAttachmentLocationSerializer(StudentAttachmentLocation.objects.get(student=request.user), many=False).data
+                address = None
+                try:
+                    address = StudentAttachmentLocationSerializer(StudentAttachmentLocation.objects.get(student=request.user), many=False).data
+                except Exception as ex:
+                    pass
+                data['address'] = address
             response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Account', 'data': data }
         except Exception as ex:
             response['errors'] = [str(ex)]
