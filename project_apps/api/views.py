@@ -153,7 +153,7 @@ class LecturerStudentAssignment_API(APIView):
         response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'Not save', 'data': None }
         try:
             students = []
-            lec_stds = LecturerStudentAssignment.objects.get(lecturer=request.user)
+            lec_stds = LecturerStudentAssignment.objects.filter(lecturer=request.user)
             for lec_std in lec_stds:
                 student = UserSerializer(lec_std.student, many=False).data
                 student['address'] = StudentAttachmentLocationSerializer(StudentAttachmentLocation.objects.get(student=lec_std.student), many=False).data
