@@ -9,6 +9,12 @@ from .views import (
     StudentLogBookItem_API,
     LecturerStudentAssignment_API
 )
+
+admin.site.site_header = "Attachment Administration"
+admin.site.site_title = "Attachment Administration"
+admin.site.index_title = "Attachment Administration"
+
+
 urlpatterns = [
     path('sign-in/', jwt_views.TokenObtainPairView.as_view(), name='sign-in'),
     path('account/', Account_API.as_view(), name='account'),
