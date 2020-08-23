@@ -108,11 +108,11 @@ class StudentLogBook_API(APIView):
     parser_classes = [JSONParser]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, format=None):
+    def get(self, request, student_id=None, format=None):
         response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'No items', 'data': None }
         try:
             if request.user.user_role == 1:
-                student = User.objects.get(pk=int(request.GET['student_id']))
+                student = User.objects.get(pk=int(student_id))
                 logbook = StudentLogBook.objects.get(student=student)
             elif request.user.user_role == 2:
                 logbook = StudentLogBook.objects.get(student=request.user)
