@@ -131,7 +131,11 @@ class StudentLogBook_API(APIView):
             obj = StudentLogBook.objects.get(id=int(request.data['id']))
             obj.status = int(request.data['status'])
             obj.save()
-            response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Saved', 'data': {} }
+            data = StudentLogBookSerializer(obj, many=False).data
+            data['student'] = UserSerializer(obj.student, many=False).data
+            logbook_items = StudentLogBookItem.objects.filter(logbook=obj)
+            data['items'] = StudentLogBookItemSerializer(logbook_items, many=True).data
+            response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Items', 'data': data }
         except Exception as ex:
             response['errors'] = [str(ex)]
         return HttpResponse(json.dumps(response), content_type='application/json') 
