@@ -117,6 +117,7 @@ class StudentLogBook_API(APIView):
             elif request.user.user_role == 2:
                 logbook = StudentLogBook.objects.get(student=request.user)
             data = StudentLogBookSerializer(logbook, many=False).data
+            data['student'] = UserSerializer(logbook.student, many=False).data
             logbook_items = StudentLogBookItem.objects.filter(logbook=logbook)
             data['items'] = StudentLogBookItemSerializer(logbook_items, many=True).data
             response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Items', 'data': data }
