@@ -8,7 +8,8 @@ from .views import (
     Account_API,
     StudentLogBook_API,
     StudentLogBookItem_API,
-    LecturerStudentAssignment_API
+    LecturerStudentAssignment_API,
+    StudentAttachmentLocation_API
 )
 
 admin.site.site_header = "Attachment Administration"
@@ -21,6 +22,8 @@ urlpatterns = [
     path('account/', Account_API.as_view(), name='account'),
     path('sign-up/', SignUp_API.as_view(), name='sign-up'),
     path('student-logbook/', StudentLogBook_API.as_view(), name='student-logbook'),
+    path('student-logbook/<student_id>/', StudentLogBook_API.as_view(), name='student-logbook-id'),
     path('student-logbook-item/', StudentLogBookItem_API.as_view(), name='student-logbook'),
     path('lecturer-student-assignments/', LecturerStudentAssignment_API.as_view(), name='lecturer-student-assignments'),
+    path('student-attachment-location/', StudentAttachmentLocation_API.as_view(), name='student-attachment-location'),
 ]

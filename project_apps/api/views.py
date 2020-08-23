@@ -84,6 +84,26 @@ class Account_API(APIView):
             response['errors'] = [str(ex)]
         return HttpResponse(json.dumps(response), content_type='application/json') 
 
+class StudentAttachmentLocation_API(APIView):
+    parser_classes = [JSONParser]
+    permission_classes = [IsAuthenticated]
+   
+    def post(self, request, format=None):
+        response = { 'status': False, 'status_message': 'Failed', 'errors': [], 'message': 'Not save', 'data': None }
+        try:
+            obj = StudentAttachmentLocation(
+                student = request.user,
+                street = request.data['street'],
+                lat = request.data['lat'],
+                lng = request.data['lng'],
+                info = request.data['info']
+            )
+            obj.save()
+            response = { 'status': True,  'status_message': 'Success', 'errors': [], 'message': 'Saved', 'data': None }
+        except Exception as ex:
+            response['errors'] = [str(ex)]
+        return HttpResponse(json.dumps(response), content_type='application/json') 
+
 class StudentLogBook_API(APIView):
     parser_classes = [JSONParser]
     permission_classes = [IsAuthenticated]
