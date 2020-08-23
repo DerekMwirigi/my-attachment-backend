@@ -12,9 +12,10 @@ class StudentLogBookItemSerializer(serializers.ModelSerializer):
         fields = ('id','date', 'worked_on', 'created_on', 'status')
 
 class StudentLogBookSerializer(serializers.ModelSerializer):
+    student = UserSerializer(student, many=False).data
     class Meta:
         model = StudentLogBook
-        fields = ('id','label', 'created_on')
+        fields = ('id','label', 'student', 'created_on')
 
 class StudentAttachmentLocationSerializer(serializers.ModelSerializer):
     class Meta:
