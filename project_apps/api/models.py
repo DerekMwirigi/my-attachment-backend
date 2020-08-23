@@ -52,8 +52,8 @@ class User(AbstractUser):
 
 class Course(models.Model):
     STATUS_CHOICES = (
-        ('0','In active'),
-        ('1', 'Active')
+        (0,'In active'),
+        (1, 'Active')
     )
     name = models.CharField(max_length=50)
     code = models.UUIDField(default=uuid.uuid4)
@@ -72,8 +72,8 @@ class Course(models.Model):
 
 class LecturerStudentAssignment(models.Model):
     STATUS_CHOICES = (
-        ('0','In active'),
-        ('1', 'Active')
+        (0,'In active'),
+        (1, 'Active')
     )
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_assign')
     lecturer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lecturer_assign')
@@ -94,8 +94,8 @@ class LecturerStudentAssignment(models.Model):
 
 class StudentLogBook(models.Model):
     STATUS_CHOICES = (
-        ('0','Not Approved'),
-        ('1', 'Approved')
+        (0,'Not Approved'),
+        (1, 'Approved')
     )
     label = models.CharField(max_length=500, default='Default Logbook')
     student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='student_logbook')
@@ -115,8 +115,8 @@ class StudentLogBook(models.Model):
 
 class StudentLogBookItem(models.Model):
     STATUS_CHOICES = (
-        ('0','Not Approved'),
-        ('1', 'Approved')
+        (0,'Not Approved'),
+        (1, 'Approved')
     )
     code = models.UUIDField(default=uuid.uuid4)
     date = models.DateField(blank=True)
