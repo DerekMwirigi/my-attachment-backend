@@ -56,6 +56,7 @@ THIRD_PARTY_APPS = (
 
 LOCAL_APPS = (
     'project_apps.api.apps.ApiConfig',
+    'project_apps.services.aftlkng_api.apps.AftlkngApiConfig',
 )
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
