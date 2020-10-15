@@ -7,7 +7,10 @@ from .models import (
     StudentLogBook,
     StudentAttachmentLocation
 )
-admin.site.register(User)
+class UserAdmin(admin.ModelAdmin):
+    list_display= ('first_name', 'last_name', 'phone', 'email', 'user_role')
+
+admin.site.register(User, UserAdmin)
 admin.site.register(Course)
 admin.site.register(LecturerStudentAssignment)
 admin.site.register(StudentLogBookItem)
