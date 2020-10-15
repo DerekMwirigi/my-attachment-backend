@@ -79,7 +79,6 @@ class LecturerStudentAssignment(models.Model):
     lecturer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lecturer_assign')
     code = models.UUIDField(default=uuid.uuid4)
     created_on = models.DateTimeField(default=timezone.now)
-    status = models.CharField(default=0, max_length=200, choices=STATUS_CHOICES)
 
     class Meta:
         db_table = "lecturer_student_assignments"
